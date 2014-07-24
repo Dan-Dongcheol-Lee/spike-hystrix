@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/angular.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script language="javascript">
+var myApp = angular.module('myApp', ['ngResource']);
+myApp.service('HelloWorld', ['$resource',
+    function($resource) {
+        return $resource('/example/hello-world/:name');
+    }
+])
+.service('Foo', ['$resource',
+    function($resource) {
+        return $resource('/example/foo/:name');
+    }
+])
+.service('Bar', ['$resource',
+    function($resource) {
+        return $resource('/example/bar/:name');
+    }
+])
+.controller('exampleController', ['$scope', '$interval', 'HelloWorld', 'Foo', 'Bar',
+    function($scope, $interval, HelloWorld, Foo, Bar) {
+        $interval(function() {
+            HelloWorld.get({name: 'World'}, function(data) {
+                $scope.helloWorld = data;
+            });
+        }, 1000);
+
+        $interval(function() {
+            Foo.get({name: 'Bar'}, function(data) {
+                $scope.foo = data;
+            });
+        }, 100);
+
+        $interval(function() {
+            Bar.get({name: 'Foo'}, function(data) {
+                $scope.bar = data;
+            });
+        }, 5000);
+    }
+]);
+
+    </script>
+</head>
+<body ng-controller="exampleController">
+
+</body>
+</html>
